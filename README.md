@@ -1,4 +1,4 @@
-# SearchForARegistryPath
+# Search For A Registry Path
 Search for a Registry Path for a specific Application using Python (winreg).
 
 
