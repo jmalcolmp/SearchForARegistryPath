@@ -1,9 +1,10 @@
 # SearchForARegistryPath
 Search for a Registry Path for a specific Application using Python (winreg).
 
+
 This script will set up five base keys to start searching from. These base keys are: HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, HKEY_USERS, and HKEY_CURRENT_CONFIG. 
 
-It wil lthen use a Breadth-First Search (BFS) to traverse the registry tree. 
+It will then use a Breadth-First Search (BFS) to traverse the registry tree. 
 This will begin a search at the root and explore all the neighbor nodes at the present depth prior to moving on to nodes at the next depth level.
 
 For each key it checks, the script counts how many subkeys there are, using the QueryInfoKey function.
