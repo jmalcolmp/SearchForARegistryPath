@@ -1,0 +1,45 @@
+import winreg
+import collections
+
+def bfs_registry_paths(key_name):
+    base_keys = [('HKCR', winreg.HKEY_CLASSES_ROOT), ('HKCU', winreg.HKEY_CURRENT_USER),
+                 ('HKLM', winreg.HKEY_LOCAL_MACHINE), ('HKU', winreg.HKEY_USERS),
+                 ('HKCC', winreg.HKEY_CURRENT_CONFIG)]
+
+    queue = collections.deque([(name, key, '') for name, key in base_keys])
+    results = []
+
+    while queue:
+        base_name, base_key, path = queue.popleft()
+
+        try:
+            sub_key_count, value_count, last_modified = winreg.QueryInfoKey(base_key)
+        except WindowsError:
+            continue
+
+        for i in range(sub_key_count):
+            try:
+                sub_key_name = winreg.EnumKey(base_key, i)
+                sub_key = winreg.OpenKey(base_key, sub_key_name)
+
+                new_path = "\\".join([path, sub_key_name]) if path else sub_key_name
+
+                if sub_key_name == key_name:
+                    results.append("\\".join([base_name, new_path]))
+
+                queue.append((base_name, sub_key, new_path))
+            except WindowsError:
+                continue
+
+    return results
+
+if __name__ == "__main__":
+    target_key_name = "Insert-Name-To-Be-Searched"  #Replace with your target key name
+    paths = bfs_registry_paths(target_key_name)
+
+    if paths:
+        print(f"Found the following paths for '{target_key_name}':")
+        for path in paths:
+            print(path)
+    else:
+        print(f"No registry paths found for '{target_key_name}'.")
